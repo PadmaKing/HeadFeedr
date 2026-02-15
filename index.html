@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Casper's HeadFeedr - v20.0 全自动冗余版</title>
+    <title>Casper's HeadFeedr - v20.1 修复版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -97,7 +97,7 @@
             </div>
             <h1 class="text-5xl densmore-title text-psy-red-dark leading-[0.9] mb-2">Casper's<br>HeadFeedr</h1>
             <div id="current-project-label" class="bg-psy-pink-light/50 text-psy-red-dark px-3 py-1 rounded-full text-xs font-bold mb-2 truncate max-w-[200px]">Loading...</div>
-            <div class="text-xs font-bold text-psy-red-mid">v 20.0 Auto-Failover</div>
+            <div class="text-xs font-bold text-psy-red-mid">v 20.1 Fix</div>
         </div>
         <nav class="flex-1 px-6 space-y-3 overflow-y-auto">
             <button onclick="switchTab('module-logline', this)" class="pc-nav-btn w-full text-left active">1. Logline</button>
@@ -121,23 +121,10 @@
         <div id="module-logline" class="module-section block h-full flex flex-col justify-start md:justify-center">
             <div class="md:hidden text-center mb-4 mt-2"><h2 class="text-4xl densmore-title text-psy-red-dark">Logline</h2><div id="mobile-project-label" class="text-xs text-psy-red-mid font-bold mt-1 bg-white/50 inline-block px-2 rounded">Loading...</div></div>
             <div class="card-box p-6 md:p-10 space-y-4 md:space-y-6 max-w-5xl mx-auto w-full">
-                <div>
-                    <label class="block text-sm font-bold text-psy-red-dark mb-1">Setting</label>
-                    <textarea id="setting" rows="3" oninput="saveData('setting',this.value)" placeholder="Where and when does it take place?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-psy-red-dark mb-1">Protagonist</label>
-                    <textarea id="protagonist" rows="3" oninput="saveData('protagonist',this.value)" placeholder="Who is the hero?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-psy-red-dark mb-1">Goal</label>
-                    <textarea id="goal" rows="3" oninput="saveData('goal',this.value)" placeholder="What do they want?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-psy-red-dark mb-1">Obstacle</label>
-                    <textarea id="obstacle" rows="3" oninput="saveData('obstacle',this.value)" placeholder="What stands in their way?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea>
-                </div>
-                
+                <div><label class="block text-sm font-bold text-psy-red-dark mb-1">Setting</label><textarea id="setting" rows="3" oninput="saveData('setting',this.value)" placeholder="Where and when does it take place?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea></div>
+                <div><label class="block text-sm font-bold text-psy-red-dark mb-1">Protagonist</label><textarea id="protagonist" rows="3" oninput="saveData('protagonist',this.value)" placeholder="Who is the hero?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea></div>
+                <div><label class="block text-sm font-bold text-psy-red-dark mb-1">Goal</label><textarea id="goal" rows="3" oninput="saveData('goal',this.value)" placeholder="What do they want?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea></div>
+                <div><label class="block text-sm font-bold text-psy-red-dark mb-1">Obstacle</label><textarea id="obstacle" rows="3" oninput="saveData('obstacle',this.value)" placeholder="What stands in their way?..." class="w-full psy-input rounded-xl p-3 text-lg"></textarea></div>
                 <div class="flex gap-2 md:gap-4 pt-2 md:pt-6">
                     <button onclick="generateLogline()" class="flex-1 bg-white border-2 border-psy-text-main text-psy-text-main text-lg md:text-2xl py-3 md:py-4 rounded-xl font-bold shadow-sm">Combine</button>
                     <button onclick="aiBrainstormLogline()" id="btn-ai-logline" class="flex-1 psy-btn text-lg md:text-2xl py-3 md:py-4 rounded-xl">✨ AI Idea (Auto-Fill)</button>
@@ -228,18 +215,21 @@
         </div>
     </div>
 
+    <div id="bookshelf-modal" class="fixed inset-0 modal-bg z-[80] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl h-[80vh] rounded-2xl border-4 border-psy-red-dark flex flex-col overflow-hidden">
+            <div class="p-6 bg-psy-pink-bg border-b-2 border-psy-red-dark flex justify-between items-center"><h3 class="text-3xl densmore-title text-psy-red-dark">📚 My Bookshelf</h3><button onclick="document.getElementById('bookshelf-modal').classList.add('hidden')" class="text-3xl">&times;</button></div>
+            <div class="p-6 flex-1 overflow-y-auto bg-gray-50">
+                <div class="flex gap-2 mb-6"><input type="text" id="new-project-name" placeholder="New Book Title..." class="flex-1 border-2 border-psy-red-mid p-3 rounded-lg text-lg"><button onclick="createNewProject()" class="psy-btn px-6 rounded-lg text-lg font-bold">+</button></div>
+                <div id="project-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var quill, dbReady = false;
         var currentProjectId = "default";
         var projectList = [];
-        
-        // Default Configs
-        const DEFAULT_CONFIGS = { 
-            deepseek: { url: 'https://api.deepseek.com', model: 'deepseek-chat', key: '' }, 
-            gemini: { url: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-1.5-flash', key: '' }, 
-            openai: { url: 'https://api.openai.com/v1', model: 'gpt-4o', key: '' }, 
-            custom: { url: '', model: '', key: '' } 
-        };
+        const DEFAULT_CONFIGS = { deepseek: { url: 'https://api.deepseek.com', model: 'deepseek-chat', key: '' }, gemini: { url: 'https://generativelanguage.googleapis.com/v1beta/openai', model: 'gemini-1.5-flash', key: '' }, openai: { url: 'https://api.openai.com/v1', model: 'gpt-4o', key: '' }, custom: { url: '', model: '', key: '' } };
 
         async function initApp() {
             try {
@@ -256,11 +246,36 @@
             } catch (e) { console.error(e); updateStatus("OFFLINE", "text-red-600"); }
         }
 
-        // --- Core Project Logic ---
-        async function initProjectSystem() { projectList = await localforage.getItem('sys_project_list') || [{id: 'default', name: 'Default Project', created: Date.now()}]; currentProjectId = await localforage.getItem('sys_current_project_id') || 'default'; updateProjectLabel(); }
+        async function initProjectSystem() {
+            projectList = await localforage.getItem('sys_project_list') || [{id: 'default', name: 'Default Project', created: Date.now()}];
+            if (!Array.isArray(projectList)) projectList = [{id: 'default', name: 'Default Project', created: Date.now()}]; // Safety Fix
+            currentProjectId = await localforage.getItem('sys_current_project_id') || 'default';
+            updateProjectLabel();
+        }
         function updateProjectLabel() { const proj = projectList.find(p => p.id === currentProjectId) || projectList[0]; document.getElementById('current-project-label').innerText = proj.name; if(document.getElementById('mobile-project-label')) document.getElementById('mobile-project-label').innerText = proj.name; }
         async function quickNewProject() { const name = prompt("Enter the title for your new book:"); if (!name || !name.trim()) return; const newId = 'proj_' + Date.now(); projectList.push({id: newId, name: name.trim(), created: Date.now()}); await localforage.setItem('sys_project_list', projectList); await switchProject(newId); }
-        function openBookshelf() { const list = document.getElementById('project-list'); list.innerHTML = ''; projectList.forEach(p => { const isActive = p.id === currentProjectId ? 'active-project' : ''; const div = document.createElement('div'); div.className = `project-card bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between h-32 ${isActive}`; div.onclick = () => switchProject(p.id); div.innerHTML = `<div class="font-bold text-xl text-psy-red-dark truncate">${p.name}</div><div class="flex justify-between items-end mt-2"><span class="text-xs text-gray-400">${new Date(p.created).toLocaleDateString()}</span>${p.id!=='default'?`<button onclick="event.stopPropagation();deleteProject('${p.id}')" class="text-red-400 hover:text-red-600 text-sm font-bold p-2">🗑️</button>`:''}</div>`; list.appendChild(div); }); document.getElementById('bookshelf-modal').classList.remove('hidden'); }
+        
+        // ★★★ FIXED: OPEN BOOKSHELF ★★★
+        async function openBookshelf() { 
+            // Force reload to ensure data integrity
+            projectList = await localforage.getItem('sys_project_list');
+            if (!Array.isArray(projectList) || projectList.length === 0) {
+                projectList = [{id: 'default', name: 'Default Project', created: Date.now()}];
+                await localforage.setItem('sys_project_list', projectList);
+            }
+            
+            const list = document.getElementById('project-list'); list.innerHTML = ''; 
+            projectList.forEach(p => { 
+                const isActive = p.id === currentProjectId ? 'active-project' : ''; 
+                const div = document.createElement('div'); 
+                div.className = `project-card bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between h-32 ${isActive}`; 
+                div.onclick = () => switchProject(p.id); 
+                div.innerHTML = `<div class="font-bold text-xl text-psy-red-dark truncate">${p.name}</div><div class="flex justify-between items-end mt-2"><span class="text-xs text-gray-400">${new Date(p.created).toLocaleDateString()}</span>${p.id!=='default'?`<button onclick="event.stopPropagation();deleteProject('${p.id}')" class="text-red-400 hover:text-red-600 text-sm font-bold p-2">🗑️</button>`:''}</div>`; 
+                list.appendChild(div); 
+            }); 
+            document.getElementById('bookshelf-modal').classList.remove('hidden'); 
+        }
+
         async function createNewProject() { const name = document.getElementById('new-project-name').value.trim(); if(!name) return; const newId = 'proj_' + Date.now(); projectList.push({id: newId, name: name, created: Date.now()}); await localforage.setItem('sys_project_list', projectList); document.getElementById('new-project-name').value = ''; switchProject(newId); }
         async function switchProject(id) { if(id === currentProjectId && !document.getElementById('bookshelf-modal').classList.contains('hidden')) { document.getElementById('bookshelf-modal').classList.add('hidden'); return; } currentProjectId = id; await localforage.setItem('sys_current_project_id', id); updateProjectLabel(); document.getElementById('bookshelf-modal').classList.add('hidden'); document.getElementById('setting').value = ''; document.getElementById('protagonist').value = ''; document.getElementById('chat-history').innerHTML = ''; await loadAllModules(); const content = await loadData('draft_html'); if(quill) { quill.enable(false); quill.root.innerHTML = content || ''; quill.enable(true); } await loadChatHistory(); showCustomToast(`Switched: ${projectList.find(p=>p.id===id).name}`); }
         async function deleteProject(id) { if(!confirm("Delete this entire book?")) return; projectList = projectList.filter(p => p.id !== id); await localforage.setItem('sys_project_list', projectList); if(currentProjectId === id) switchProject('default'); else openBookshelf(); }
@@ -270,8 +285,8 @@
         async function migrateOldData() { if(!dbReady) return; const lc = await localforage.getItem('setting'); const nc = await localforage.getItem('default_setting'); if(lc && !nc) { const k=['setting','protagonist','goal','obstacle','my_novel_characters','my_novel_outline','my_novel_draft_html','my_novel_chat_history']; for(let i of k) { const v=await localforage.getItem(i); let nk=i.replace('my_novel_',''); if(v) await localforage.setItem(`default_${nk}`, v); } } }
         function importBackup(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); const newProjId = 'imp_' + Date.now(); const newProjName = (data.project || "Imported") + " (Copy)"; if(data.setting) await localforage.setItem(`${newProjId}_setting`, data.setting); if(data.protagonist) await localforage.setItem(`${newProjId}_protagonist`, data.protagonist); if(data.goal) await localforage.setItem(`${newProjId}_goal`, data.goal); if(data.obstacle) await localforage.setItem(`${newProjId}_obstacle`, data.obstacle); if(data.chars || data.characters) await localforage.setItem(`${newProjId}_characters`, data.chars || data.characters); if(data.pl || data.outline) await localforage.setItem(`${newProjId}_outline`, data.pl || data.outline); if(data.txt || data.content) await localforage.setItem(`${newProjId}_draft_html`, data.txt || data.content); if(data.ch || data.chat) await localforage.setItem(`${newProjId}_chat_history`, data.ch || data.chat); projectList.push({id: newProjId, name: newProjName, created: Date.now()}); await localforage.setItem('sys_project_list', projectList); showCustomToast("Backup Imported!"); switchProject(newProjId); closeBackupModal(); } catch(err) { alert("Import Failed: Invalid JSON file."); console.error(err); } }; reader.readAsText(file); input.value = ''; }
         function downloadJSON(data, filename) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type:'application/json'})); a.download = filename; a.click(); }
-        async function exportCurrentProject() { const d = { version: "20.0", date: new Date(), project: projectList.find(p=>p.id===currentProjectId).name, setting: val('setting'), protagonist: val('protagonist'), goal: val('goal'), obstacle: val('obstacle'), chars: await loadData('characters'), pl: await loadData('outline'), txt: quill.root.innerHTML, ch: await loadData('chat_history') }; downloadJSON(d, `${d.project}_Backup.json`); }
-        async function exportAllData() { const all = { version: "20.0", date: new Date().toISOString(), type: "full_archive", projectList: projectList, projects: {}, settings: {} }; for (const proj of projectList) { const id = proj.id; const prefix = id === 'default' ? 'default_' : `${id}_`; const keys = ['setting', 'protagonist', 'goal', 'obstacle', 'characters', 'outline', 'draft_html', 'chat_history']; const projData = {}; for (const k of keys) { const val = await localforage.getItem(`${prefix}${k}`); if (val) projData[k] = val; if (id === 'default' && !val) { const l = await localforage.getItem(k); if (l) projData[k] = l; } } all.projects[id] = projData; } const g = ['ai_active_provider', 'ai_config_deepseek', 'ai_config_gemini', 'ai_config_openai', 'ai_config_custom']; for(const k of g) all.settings[k] = await localforage.getItem(k); downloadJSON(all, `HeadFeedr_Full_Archive_${new Date().toISOString().slice(0,10)}.json`); }
+        async function exportCurrentProject() { const d = { version: "20.1", date: new Date(), project: projectList.find(p=>p.id===currentProjectId).name, setting: val('setting'), protagonist: val('protagonist'), goal: val('goal'), obstacle: val('obstacle'), chars: await loadData('characters'), pl: await loadData('outline'), txt: quill.root.innerHTML, ch: await loadData('chat_history') }; downloadJSON(d, `${d.project}_Backup.json`); }
+        async function exportAllData() { const all = { version: "20.1", date: new Date().toISOString(), type: "full_archive", projectList: projectList, projects: {}, settings: {} }; for (const proj of projectList) { const id = proj.id; const prefix = id === 'default' ? 'default_' : `${id}_`; const keys = ['setting', 'protagonist', 'goal', 'obstacle', 'characters', 'outline', 'draft_html', 'chat_history']; const projData = {}; for (const k of keys) { const val = await localforage.getItem(`${prefix}${k}`); if (val) projData[k] = val; if (id === 'default' && !val) { const l = await localforage.getItem(k); if (l) projData[k] = l; } } all.projects[id] = projData; } const g = ['ai_active_provider', 'ai_config_deepseek', 'ai_config_gemini', 'ai_config_openai', 'ai_config_custom']; for(const k of g) all.settings[k] = await localforage.getItem(k); downloadJSON(all, `HeadFeedr_Full_Archive_${new Date().toISOString().slice(0,10)}.json`); }
         
         function val(id) { return document.getElementById(id).value; }
         function switchTab(tid, btn) { document.querySelectorAll('.module-section').forEach(e => e.classList.add('hidden')); document.getElementById(tid).classList.remove('hidden'); document.querySelectorAll('.pc-nav-btn, .mobile-nav-btn').forEach(b => { b.classList.remove('active'); b.classList.add('inactive'); }); if(btn) { btn.classList.add('active'); btn.classList.remove('inactive'); } }
@@ -282,110 +297,14 @@
         function updateStatus(t, c) { document.getElementById('db-status-pc').innerText=t; document.getElementById('db-status-pc').className="font-bold "+c; if(document.getElementById('db-status-mobile')) document.getElementById('db-status-mobile').innerText=t; }
         function initQuillEditor() { quill = new Quill('#editor-container', { theme: 'snow', modules: { toolbar: [[{'header':[1,2,3,false]}],['bold','italic','underline'],[{'align':[]}, {'indent':'+1'}, {'indent':'-1'}],['image','clean']] }, placeholder: 'Start writing your masterpiece...' }); quill.on('text-change', () => { document.getElementById('word-count').innerText = quill.getText().trim().split(/\s+/).length; clearTimeout(window.st); window.st = setTimeout(async () => { if(dbReady) await saveData('draft_html', quill.root.innerHTML); document.getElementById('save-indicator').classList.remove('opacity-0'); setTimeout(()=>document.getElementById('save-indicator').classList.add('opacity-0'),1500); }, 1000); }); document.getElementById('editor-wrapper').addEventListener('drop', e => { e.preventDefault(); if(e.dataTransfer.files[0]) { const r = new FileReader(); r.readAsDataURL(e.dataTransfer.files[0]); r.onload = ev => { const rg = quill.getSelection(true); quill.insertEmbed(rg.index, 'image', ev.target.result); } } }); }
         async function loadAllModules() { document.getElementById('setting').value = await loadData('setting') || ''; document.getElementById('protagonist').value = await loadData('protagonist') || ''; document.getElementById('goal').value = await loadData('goal') || ''; document.getElementById('obstacle').value = await loadData('obstacle') || ''; renderCharacterList(); initOutlineBoard(); }
-        
-        // --- AI Settings (New Multi-Provider System) ---
-        async function openAISettings(){ 
-            document.getElementById('ai-settings-modal').classList.remove('hidden'); 
-            const active = await localforage.getItem('ai_active_provider') || 'deepseek';
-            document.getElementById('setting-provider').value = active;
-            await loadConfigForProvider(active);
-        }
+        async function openAISettings(){ document.getElementById('ai-settings-modal').classList.remove('hidden'); const active = await localforage.getItem('ai_active_provider') || 'deepseek'; document.getElementById('setting-provider').value = active; await loadConfigForProvider(active); }
         function closeAISettings(){ document.getElementById('ai-settings-modal').classList.add('hidden'); }
-        
-        async function loadConfigForProvider(provider) {
-            const config = await localforage.getItem(`ai_config_${provider}`) || DEFAULT_CONFIGS[provider] || DEFAULT_CONFIGS['custom'];
-            document.getElementById('setting-base-url').value = config.url;
-            document.getElementById('setting-model-name').value = config.model;
-            document.getElementById('setting-api-key').value = config.key || '';
-        }
-
-        async function saveAISettings() { 
-            const provider = document.getElementById('setting-provider').value;
-            const config = {
-                url: document.getElementById('setting-base-url').value,
-                model: document.getElementById('setting-model-name').value,
-                key: document.getElementById('setting-api-key').value
-            };
-            await localforage.setItem(`ai_config_${provider}`, config);
-            await localforage.setItem('ai_active_provider', provider);
-            closeAISettings(); 
-            showCustomToast("AI Settings Saved!"); 
-        }
-
-        // --- Core AI Call (Auto Failover) ---
-        async function callAI(msgs, btn) { 
-            let activeProvider = await localforage.getItem('ai_active_provider') || 'deepseek';
-            const providers = ['deepseek', 'gemini', 'openai', 'custom'];
-            
-            // Reorder to try active first, then others
-            const tryList = [activeProvider, ...providers.filter(p => p !== activeProvider)];
-            
-            const oldTxt = btn.innerText; btn.innerText = "⏳"; btn.disabled = true;
-
-            for (let provider of tryList) {
-                const config = await localforage.getItem(`ai_config_${provider}`) || DEFAULT_CONFIGS[provider];
-                if (!config || !config.key) continue; // Skip if no key
-
-                const rawKeys = config.key.split('\n').map(k => k.trim()).filter(k => k);
-                let u = config.url;
-                if (!u.endsWith('/chat/completions') && !u.includes('/generateContent')) u = u.replace(/\/+$/, "") + "/chat/completions";
-
-                for (let i = 0; i < rawKeys.length; i++) {
-                    try {
-                        const r = await fetch(u, { 
-                            method: 'POST', 
-                            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${rawKeys[i]}`}, 
-                            body: JSON.stringify({ model: config.model, messages: Array.isArray(msgs) ? msgs : [{role:'user', content: msgs}], temperature: 0.7 }) 
-                        });
-                        
-                        if(!r.ok) throw await r.text(); // Trigger fallback
-                        
-                        const d = await r.json(); 
-                        btn.innerText = oldTxt; btn.disabled = false;
-                        return d.choices[0].message.content;
-                    } catch(e) {
-                        console.warn(`Provider ${provider} Key ${i} Failed:`, e);
-                        // Continue to next key, then next provider
-                    }
-                }
-            }
-            
-            // If all failed
-            alert("All AI providers failed. Please check your keys/quota.");
-            btn.innerText = oldTxt; btn.disabled = false;
-            return null;
-        }
-
-        async function aiBrainstormLogline() {
-            const btn = document.getElementById('btn-ai-logline');
-            const setting = val('setting'); const protagonist = val('protagonist'); const goal = val('goal'); const obstacle = val('obstacle');
-            if(!setting && !protagonist && !goal && !obstacle) {
-                const sys = "You are a creative writing engine. Output ONLY valid JSON.";
-                const usr = "Generate a unique story concept. Return JSON with keys: setting, protagonist, goal, obstacle.";
-                const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn);
-                if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const data = JSON.parse(cleanJson); document.getElementById('setting').value = data.setting; await saveData('setting', data.setting); document.getElementById('protagonist').value = data.protagonist; await saveData('protagonist', data.protagonist); document.getElementById('goal').value = data.goal; await saveData('goal', data.goal); document.getElementById('obstacle').value = data.obstacle; await saveData('obstacle', data.obstacle); generateLogline(); } catch(e) { document.getElementById('ai-logline-results').innerText = res; } }
-            } else {
-                const sys = "Creative writer."; const usr = `Context: ${setting} ${protagonist} ${goal} ${obstacle}. Generate 3 polished loglines.`;
-                const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn);
-                if(res) document.getElementById('ai-logline-results').innerText = res;
-            }
-        }
-        async function aiGenerateCharsFromLogline() {
-            const btn = document.getElementById('btn-ai-char');
-            const logline = `Setting: ${val('setting')}, Protagonist: ${val('protagonist')}, Goal: ${val('goal')}, Obstacle: ${val('obstacle')}`;
-            const sys = "You are a character designer. Output ONLY valid JSON array of objects.";
-            const usr = `Based on: "${logline}", generate 3 key characters. Return JSON: [{"name": "...", "role": "...", "flaw": "..."}]`;
-            const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn);
-            if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const newChars = JSON.parse(cleanJson); let currentChars = await loadData('characters') || []; newChars.forEach(c => { currentChars.push({ id: Date.now() + Math.random(), name: c.name, role: c.role, flaw: c.flaw }); }); await saveData('characters', currentChars); renderCharacterList(); showCustomToast("Characters Generated!"); } catch(e) { alert("AI Error: Could not parse character data."); } }
-        }
-        async function aiSuggestPlot(act) {
-            const btn = event.target;
-            const context = `Logline: In ${val('setting')}, ${val('protagonist')} wants ${val('goal')} but faces ${val('obstacle')}.`;
-            const sys = "Screenwriter assistant. Output ONLY valid JSON array of strings.";
-            const usr = `${context} Suggest 3 plot points for ${act}. Return JSON array like: ["Point 1", "Point 2", "Point 3"]`;
-            const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn);
-            if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const points = JSON.parse(cleanJson); document.getElementById(`${act}-suggestions`).innerHTML = points.map(p => `<div class="ai-suggestion-chip" onclick="addPlotCard('${act}', '${p.replace(/'/g, "\\'")}')">+ ${p}</div>`).join(''); } catch(e) { alert("AI suggestion failed parsing."); } }
-        }
+        async function loadConfigForProvider(provider) { const config = await localforage.getItem(`ai_config_${provider}`) || DEFAULT_CONFIGS[provider] || DEFAULT_CONFIGS['custom']; document.getElementById('setting-base-url').value = config.url; document.getElementById('setting-model-name').value = config.model; document.getElementById('setting-api-key').value = config.key || ''; }
+        async function saveAISettings() { const provider = document.getElementById('setting-provider').value; const config = { url: document.getElementById('setting-base-url').value, model: document.getElementById('setting-model-name').value, key: document.getElementById('setting-api-key').value }; await localforage.setItem(`ai_config_${provider}`, config); await localforage.setItem('ai_active_provider', provider); closeAISettings(); showCustomToast("AI Settings Saved!"); }
+        async function callAI(msgs, btn) { let activeProvider = await localforage.getItem('ai_active_provider') || 'deepseek'; const providers = ['deepseek', 'gemini', 'openai', 'custom']; const tryList = [activeProvider, ...providers.filter(p => p !== activeProvider)]; const oldTxt = btn.innerText; btn.innerText = "⏳"; btn.disabled = true; for (let provider of tryList) { const config = await localforage.getItem(`ai_config_${provider}`) || DEFAULT_CONFIGS[provider]; if (!config || !config.key) continue; const rawKeys = config.key.split('\n').map(k => k.trim()).filter(k => k); let u = config.url; if (!u.endsWith('/chat/completions') && !u.includes('/generateContent')) u = u.replace(/\/+$/, "") + "/chat/completions"; for (let i = 0; i < rawKeys.length; i++) { try { const r = await fetch(u, { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${rawKeys[i]}`}, body: JSON.stringify({ model: config.model, messages: Array.isArray(msgs) ? msgs : [{role:'user', content: msgs}], temperature: 0.7 }) }); if(!r.ok) throw await r.text(); const d = await r.json(); btn.innerText = oldTxt; btn.disabled = false; return d.choices[0].message.content; } catch(e) { console.warn(`Provider ${provider} Key ${i} Failed:`, e); } } } alert("All AI providers failed. Please check your keys/quota."); btn.innerText = oldTxt; btn.disabled = false; return null; }
+        async function aiBrainstormLogline() { const btn = document.getElementById('btn-ai-logline'); const setting = val('setting'); const protagonist = val('protagonist'); const goal = val('goal'); const obstacle = val('obstacle'); if(!setting && !protagonist && !goal && !obstacle) { const sys = "You are a creative writing engine. Output ONLY valid JSON."; const usr = "Generate a unique story concept. Return JSON with keys: setting, protagonist, goal, obstacle."; const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn); if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const data = JSON.parse(cleanJson); document.getElementById('setting').value = data.setting; await saveData('setting', data.setting); document.getElementById('protagonist').value = data.protagonist; await saveData('protagonist', data.protagonist); document.getElementById('goal').value = data.goal; await saveData('goal', data.goal); document.getElementById('obstacle').value = data.obstacle; await saveData('obstacle', data.obstacle); generateLogline(); } catch(e) { document.getElementById('ai-logline-results').innerText = res; } } } else { const sys = "Creative writer."; const usr = `Context: ${setting} ${protagonist} ${goal} ${obstacle}. Generate 3 polished loglines.`; const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn); if(res) document.getElementById('ai-logline-results').innerText = res; } }
+        async function aiGenerateCharsFromLogline() { const btn = document.getElementById('btn-ai-char'); const logline = `Setting: ${val('setting')}, Protagonist: ${val('protagonist')}, Goal: ${val('goal')}, Obstacle: ${val('obstacle')}`; const sys = "You are a character designer. Output ONLY valid JSON array of objects."; const usr = `Based on: "${logline}", generate 3 key characters. Return JSON: [{"name": "...", "role": "...", "flaw": "..."}]`; const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn); if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const newChars = JSON.parse(cleanJson); let currentChars = await loadData('characters') || []; newChars.forEach(c => { currentChars.push({ id: Date.now() + Math.random(), name: c.name, role: c.role, flaw: c.flaw }); }); await saveData('characters', currentChars); renderCharacterList(); showCustomToast("Characters Generated!"); } catch(e) { alert("AI Error: Could not parse character data."); } } }
+        async function aiSuggestPlot(act) { const btn = event.target; const context = `Logline: In ${val('setting')}, ${val('protagonist')} wants ${val('goal')} but faces ${val('obstacle')}.`; const sys = "Screenwriter assistant. Output ONLY valid JSON array of strings."; const usr = `${context} Suggest 3 plot points for ${act}. Return JSON array like: ["Point 1", "Point 2", "Point 3"]`; const res = await callAI([{role:'system',content:sys}, {role:'user',content:usr}], btn); if(res) { try { const cleanJson = res.replace(/```json|```/g, '').trim(); const points = JSON.parse(cleanJson); document.getElementById(`${act}-suggestions`).innerHTML = points.map(p => `<div class="ai-suggestion-chip" onclick="addPlotCard('${act}', '${p.replace(/'/g, "\\'")}')">+ ${p}</div>`).join(''); } catch(e) { alert("AI suggestion failed parsing."); } } }
         async function addPlotCard(act, text) { let d = await loadData('outline') || {act1:[], act2:[], act3:[]}; d[act].push({ id: Date.now(), title: 'AI Idea', desc: text }); await saveData('outline', d); renderOutline(); document.getElementById(`${act}-suggestions`).innerHTML = ''; }
         function generateLogline() { document.getElementById('result-text').innerText = `In ${val('setting')}, a ${val('protagonist')} must ${val('goal')}, but faces ${val('obstacle')}.`; document.getElementById('result-text').classList.remove('hidden'); }
         async function saveNewCharacter() { let l = await loadData('characters') || []; l.push({ id: Date.now(), name: val('char-name'), role: val('char-role'), flaw: val('char-flaw') }); await saveData('characters', l); document.getElementById('char-name').value = ''; renderCharacterList(); }
