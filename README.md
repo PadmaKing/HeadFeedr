@@ -17,7 +17,7 @@ A minimalist, immersive creative writing and brainstorming tool. Designed for no
 
 1.  Click the link above to open the web app in your browser.
 2.  **(Optional)** On mobile (iOS/Android), tap the "Share" or "Menu" button and select **"Add to Home Screen"** for a native app-like experience.
-3.  Go to **Settings** and enter your API Key (e.g., Google Gemini, DeepSeek) to unlock AI features.
+3.  Go to **AI** and enter your API Key (e.g., Google Gemini, DeepSeek) to unlock AI features.
 4.  Start creating!
 
 ## ❤️ About
@@ -46,7 +46,7 @@ If you have any suggestions, feel free to open an Issue.
 
 1.  点击上方的链接打开网页。
 2.  (可选) 在手机浏览器点击“分享” -> “添加到主屏幕”，获得原生 App 体验。
-3.  在设置中填入你的 API Key (支持 Google Gemini, DeepSeek 等) 以开启 AI 功能。
+3.  在AI设置中填入你的 API Key (支持 Google Gemini, DeepSeek 等) 以开启 AI 功能。
 4.  开始创作！
 
 ## ❤️ 关于
