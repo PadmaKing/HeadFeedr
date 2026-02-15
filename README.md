@@ -4,7 +4,7 @@ A minimalist, immersive creative writing studio designed for novelists and scree
 
 👉 **[Click here to launch the App](https://padmaking.github.io/HeadFeedr/)** 👈
 
-## ✨ What's New in v20.0?
+## ✨ What's New in v20.1?
 
 * **🛡️ AI Auto-Failover System**: No more "Rate Limit" interruptions. Configure multiple AI providers (DeepSeek, Gemini, OpenAI). If one API fails or hits a quota limit, the app **automatically and instantly switches** to the next available provider to finish your request.
 * **💾 Persistent AI Config**: API keys and model settings are saved independently for each provider.
@@ -58,7 +58,7 @@ If you have any suggestions, feel free to open an Issue.
 
 ---
 
-## ✨ v20.0 更新亮点
+## ✨ v20.1 更新亮点
 
 * **🛡️ AI 自动灾备系统 (Auto-Failover)**：告别 API 报错和限流中断。你可以同时配置多个 AI 服务商（如 DeepSeek, Gemini, OpenAI）。当首选服务商报错或额度耗尽时，App 会**自动、瞬间**切换到下一个备用服务商继续完成任务。
 * **💾 AI 配置独立记忆**：每个服务商的 API Key 和模型设置都会被独立保存，切换时无需重新输入。
