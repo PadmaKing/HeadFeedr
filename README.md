@@ -2,7 +2,7 @@
 
 A minimalist, immersive creative writing and brainstorming tool. Designed for novelists, screenwriters, and creators.
 
-👉 **[Click here to launch the App](https://YOUR-USERNAME.github.io/YOUR-REPO-NAME/)** 👈
+👉 **[Click here to launch the App](https://padmaking.github.io/HeadFeedr/)** 👈
 
 ## ✨ Key Features
 
