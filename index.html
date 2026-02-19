@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Casper's HeadFeedr - v20.1 修复版</title>
+    <title>Casper's HeadFeedr - v20.2 移动端修复版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -39,7 +39,19 @@
 
         body { background-color: var(--psy-pink-bg); color: var(--psy-text-main); font-family: 'Stardos Stencil', cursive; letter-spacing: 0.5px; overscroll-behavior: none; }
         #sidebar { background-color: var(--psy-pink-bg); border-right: 3px solid var(--psy-red-mid); }
-        #mobile-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-top: 2px solid var(--psy-red-mid); position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; padding-bottom: env(safe-area-inset-bottom); }
+        
+        /* ★★★ MOBILE NAV FIX ★★★ */
+        #mobile-nav { 
+            background: #FFFFFF; /* Force Solid White */
+            border-top: 3px solid var(--psy-red-mid); 
+            position: fixed; 
+            bottom: 0; left: 0; right: 0; 
+            z-index: 100; /* Super High Z-Index */
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1); /* Shadow for visibility */
+            height: 4rem; /* Fixed height */
+        }
+
         #main-content { background: radial-gradient(circle at center, #FFF0F0 0%, var(--psy-pink-bg) 100%); }
         .densmore-title { font-family: 'Stardos Stencil', cursive; font-weight: 700; letter-spacing: -2px; line-height: 0.9; text-shadow: 2px 2px 0px rgba(159, 65, 83, 0.3); }
         
@@ -49,8 +61,12 @@
         .pc-nav-btn { font-family: 'Stardos Stencil', cursive; font-size: 1.3rem; padding: 12px; margin-bottom: 8px; border-radius: 12px; transition: all 0.2s; font-weight: bold; }
         .pc-nav-btn.active { background: var(--psy-red-dark); color: #FCECEC; box-shadow: 3px 3px 0px var(--psy-text-main); }
         .pc-nav-btn.inactive:hover { background: rgba(159, 65, 83, 0.1); }
-        .mobile-nav-btn.active { color: var(--psy-red-dark); border-top: 3px solid var(--psy-red-dark); background: rgba(159,65,83,0.1); }
-        .mobile-nav-btn.inactive { color: #888; border-top: 3px solid transparent; }
+        
+        /* Updated Mobile Buttons */
+        .mobile-nav-btn { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; transition: all 0.2s; }
+        .mobile-nav-btn.active { color: var(--psy-red-dark); background: #FFF0F0; }
+        .mobile-nav-btn.inactive { color: #999; }
+        .mobile-nav-icon { font-size: 1.2rem; margin-bottom: 2px; }
 
         #editor-wrapper { border: 2px solid var(--psy-text-main) !important; box-shadow: 4px 4px 0px var(--psy-text-main); background: #FFFAFA; border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
         .ql-toolbar { background: var(--psy-red-mid); border-bottom: 2px solid var(--psy-text-main) !important; border-top: none !important; border-left: none !important; border-right: none !important; z-index: 10; position: relative; flex-shrink: 0; display: flex; flex-wrap: wrap; padding: 8px !important; }
@@ -72,7 +88,7 @@
         .dropdown-menu { background: #FFF; border: 2px solid var(--psy-text-main); box-shadow: 4px 4px 0px var(--psy-text-main); }
 
         #integrated-chat { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); border-left: 3px solid var(--psy-red-mid); display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 40; }
-        @media (max-width: 767px) { #integrated-chat { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; border-left: none; border-top: 3px solid var(--psy-red-mid); box-shadow: 0 -4px 20px rgba(0,0,0,0.2); } #integrated-chat.chat-hidden { transform: translateY(100%); } }
+        @media (max-width: 767px) { #integrated-chat { position: absolute; bottom: 4rem; left: 0; right: 0; height: 60%; border-left: none; border-top: 3px solid var(--psy-red-mid); box-shadow: 0 -4px 20px rgba(0,0,0,0.2); } #integrated-chat.chat-hidden { transform: translateY(120%); } }
         @media (min-width: 768px) { #integrated-chat { position: absolute; top: 0; right: 0; bottom: 0; width: 350px; border-left: 3px solid var(--psy-red-mid); box-shadow: -4px 0 20px rgba(0,0,0,0.1); } #integrated-chat.chat-hidden { transform: translateX(100%); } }
         .chat-bubble-user { background: var(--psy-red-mid); color: white; border-radius: 14px 14px 0 14px; padding: 10px 14px; max-width: 90%; margin-left: auto; font-family: sans-serif; font-size: 0.9rem; }
         .chat-bubble-ai { background: white; color: var(--psy-text-main); border: 2px solid var(--psy-red-mid); border-radius: 14px 14px 14px 0; padding: 10px 14px; max-width: 90%; margin-right: auto; font-family: sans-serif; font-size: 0.9rem; }
@@ -97,7 +113,7 @@
             </div>
             <h1 class="text-5xl densmore-title text-psy-red-dark leading-[0.9] mb-2">Casper's<br>HeadFeedr</h1>
             <div id="current-project-label" class="bg-psy-pink-light/50 text-psy-red-dark px-3 py-1 rounded-full text-xs font-bold mb-2 truncate max-w-[200px]">Loading...</div>
-            <div class="text-xs font-bold text-psy-red-mid">v 20.1 Fix</div>
+            <div class="text-xs font-bold text-psy-red-mid">v 20.2 Mobile Fix</div>
         </div>
         <nav class="flex-1 px-6 space-y-3 overflow-y-auto">
             <button onclick="switchTab('module-logline', this)" class="pc-nav-btn w-full text-left active">1. Logline</button>
@@ -178,6 +194,29 @@
         </div>
     </div>
 
+    <div id="mobile-nav" class="md:hidden flex justify-around items-center px-1 text-xs font-bold text-gray-500 font-sans">
+        <button onclick="switchTab('module-logline', this)" class="mobile-nav-btn active flex-1">
+            <span class="mobile-nav-icon">🏠</span>
+            <span>Logline</span>
+        </button>
+        <button onclick="switchTab('module-character', this)" class="mobile-nav-btn inactive flex-1">
+            <span class="mobile-nav-icon">👥</span>
+            <span>Char</span>
+        </button>
+        <button onclick="switchTab('module-outline', this)" class="mobile-nav-btn inactive flex-1">
+            <span class="mobile-nav-icon">🎬</span>
+            <span>Plot</span>
+        </button>
+        <button onclick="switchTab('module-writing', this)" class="mobile-nav-btn inactive flex-1">
+            <span class="mobile-nav-icon">✍️</span>
+            <span>Write</span>
+        </button>
+        <button onclick="openBookshelf()" class="mobile-nav-btn inactive flex-1 text-psy-red-dark">
+            <span class="mobile-nav-icon">📚</span>
+            <span>Books</span>
+        </button>
+    </div>
+
     <div id="ai-settings-modal" class="fixed inset-0 modal-bg z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md md:w-[36rem] p-6 rounded-2xl border-4 border-psy-red-dark shadow-2xl">
             <h3 class="text-2xl font-bold mb-4">AI Settings (Multi-Provider)</h3>
@@ -225,6 +264,17 @@
         </div>
     </div>
 
+    <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/50 z-50 hidden backdrop-blur-sm transition-opacity"></div>
+    <div id="plot-drawer" class="fixed right-0 bottom-0 md:top-0 w-full md:w-[35rem] h-[80vh] md:h-full bg-white rounded-t-2xl md:rounded-none border-t-4 md:border-t-0 md:border-l-4 border-psy-red-dark shadow-2xl z-[60] transform translate-y-full md:translate-y-0 md:translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 md:p-8 bg-psy-pink-bg border-b-2 border-psy-red-dark flex justify-between items-center"><h3 class="text-2xl md:text-4xl densmore-title text-psy-red-dark">New Plot</h3><button onclick="closeDrawer()" class="text-4xl md:text-5xl hover:text-red-600">&times;</button></div>
+        <div class="p-4 md:p-8 flex-1 space-y-4 md:space-y-6 overflow-y-auto">
+            <input type="text" id="drawer-title" placeholder="Title" class="w-full psy-input rounded-lg p-3 md:p-4 text-lg md:text-xl font-bold">
+            <textarea id="drawer-desc" rows="6" placeholder="Description..." class="w-full psy-input rounded-lg p-3 md:p-4 text-base md:text-lg"></textarea>
+            <div class="bg-psy-pink-bg/50 p-4 md:p-6 rounded-lg border-2 border-psy-red-mid"><p class="text-base md:text-xl text-psy-red-dark mb-2 md:mb-3 font-bold">AI Suggestions:</p><div class="flex gap-2 md:gap-3"><button onclick="aiBrainstormPlot('twist')" id="btn-ai-twist" class="flex-1 bg-white border-2 border-psy-red-dark py-2 rounded font-bold text-sm md:text-base">Twist</button><button onclick="aiBrainstormPlot('conflict')" id="btn-ai-conflict" class="flex-1 bg-white border-2 border-psy-red-dark py-2 rounded font-bold text-sm md:text-base">Conflict</button><button onclick="aiBrainstormPlot('emotion')" id="btn-ai-emotion" class="flex-1 bg-white border-2 border-psy-red-dark py-2 rounded font-bold text-sm md:text-base">Emotion</button></div></div>
+        </div>
+        <div class="p-4 md:p-8 border-t-2 border-psy-red-dark bg-gray-50 pb-8 md:pb-8"><button onclick="savePlotCardFromDrawer()" class="w-full psy-btn py-3 md:py-4 rounded-lg text-xl md:text-2xl">Add to Board</button></div>
+    </div>
+
     <script>
         var quill, dbReady = false;
         var currentProjectId = "default";
@@ -248,22 +298,18 @@
 
         async function initProjectSystem() {
             projectList = await localforage.getItem('sys_project_list') || [{id: 'default', name: 'Default Project', created: Date.now()}];
-            if (!Array.isArray(projectList)) projectList = [{id: 'default', name: 'Default Project', created: Date.now()}]; // Safety Fix
+            if (!Array.isArray(projectList)) projectList = [{id: 'default', name: 'Default Project', created: Date.now()}]; 
             currentProjectId = await localforage.getItem('sys_current_project_id') || 'default';
             updateProjectLabel();
         }
         function updateProjectLabel() { const proj = projectList.find(p => p.id === currentProjectId) || projectList[0]; document.getElementById('current-project-label').innerText = proj.name; if(document.getElementById('mobile-project-label')) document.getElementById('mobile-project-label').innerText = proj.name; }
         async function quickNewProject() { const name = prompt("Enter the title for your new book:"); if (!name || !name.trim()) return; const newId = 'proj_' + Date.now(); projectList.push({id: newId, name: name.trim(), created: Date.now()}); await localforage.setItem('sys_project_list', projectList); await switchProject(newId); }
-        
-        // ★★★ FIXED: OPEN BOOKSHELF ★★★
         async function openBookshelf() { 
-            // Force reload to ensure data integrity
             projectList = await localforage.getItem('sys_project_list');
             if (!Array.isArray(projectList) || projectList.length === 0) {
                 projectList = [{id: 'default', name: 'Default Project', created: Date.now()}];
                 await localforage.setItem('sys_project_list', projectList);
             }
-            
             const list = document.getElementById('project-list'); list.innerHTML = ''; 
             projectList.forEach(p => { 
                 const isActive = p.id === currentProjectId ? 'active-project' : ''; 
@@ -275,7 +321,6 @@
             }); 
             document.getElementById('bookshelf-modal').classList.remove('hidden'); 
         }
-
         async function createNewProject() { const name = document.getElementById('new-project-name').value.trim(); if(!name) return; const newId = 'proj_' + Date.now(); projectList.push({id: newId, name: name, created: Date.now()}); await localforage.setItem('sys_project_list', projectList); document.getElementById('new-project-name').value = ''; switchProject(newId); }
         async function switchProject(id) { if(id === currentProjectId && !document.getElementById('bookshelf-modal').classList.contains('hidden')) { document.getElementById('bookshelf-modal').classList.add('hidden'); return; } currentProjectId = id; await localforage.setItem('sys_current_project_id', id); updateProjectLabel(); document.getElementById('bookshelf-modal').classList.add('hidden'); document.getElementById('setting').value = ''; document.getElementById('protagonist').value = ''; document.getElementById('chat-history').innerHTML = ''; await loadAllModules(); const content = await loadData('draft_html'); if(quill) { quill.enable(false); quill.root.innerHTML = content || ''; quill.enable(true); } await loadChatHistory(); showCustomToast(`Switched: ${projectList.find(p=>p.id===id).name}`); }
         async function deleteProject(id) { if(!confirm("Delete this entire book?")) return; projectList = projectList.filter(p => p.id !== id); await localforage.setItem('sys_project_list', projectList); if(currentProjectId === id) switchProject('default'); else openBookshelf(); }
@@ -285,9 +330,8 @@
         async function migrateOldData() { if(!dbReady) return; const lc = await localforage.getItem('setting'); const nc = await localforage.getItem('default_setting'); if(lc && !nc) { const k=['setting','protagonist','goal','obstacle','my_novel_characters','my_novel_outline','my_novel_draft_html','my_novel_chat_history']; for(let i of k) { const v=await localforage.getItem(i); let nk=i.replace('my_novel_',''); if(v) await localforage.setItem(`default_${nk}`, v); } } }
         function importBackup(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); const newProjId = 'imp_' + Date.now(); const newProjName = (data.project || "Imported") + " (Copy)"; if(data.setting) await localforage.setItem(`${newProjId}_setting`, data.setting); if(data.protagonist) await localforage.setItem(`${newProjId}_protagonist`, data.protagonist); if(data.goal) await localforage.setItem(`${newProjId}_goal`, data.goal); if(data.obstacle) await localforage.setItem(`${newProjId}_obstacle`, data.obstacle); if(data.chars || data.characters) await localforage.setItem(`${newProjId}_characters`, data.chars || data.characters); if(data.pl || data.outline) await localforage.setItem(`${newProjId}_outline`, data.pl || data.outline); if(data.txt || data.content) await localforage.setItem(`${newProjId}_draft_html`, data.txt || data.content); if(data.ch || data.chat) await localforage.setItem(`${newProjId}_chat_history`, data.ch || data.chat); projectList.push({id: newProjId, name: newProjName, created: Date.now()}); await localforage.setItem('sys_project_list', projectList); showCustomToast("Backup Imported!"); switchProject(newProjId); closeBackupModal(); } catch(err) { alert("Import Failed: Invalid JSON file."); console.error(err); } }; reader.readAsText(file); input.value = ''; }
         function downloadJSON(data, filename) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type:'application/json'})); a.download = filename; a.click(); }
-        async function exportCurrentProject() { const d = { version: "20.1", date: new Date(), project: projectList.find(p=>p.id===currentProjectId).name, setting: val('setting'), protagonist: val('protagonist'), goal: val('goal'), obstacle: val('obstacle'), chars: await loadData('characters'), pl: await loadData('outline'), txt: quill.root.innerHTML, ch: await loadData('chat_history') }; downloadJSON(d, `${d.project}_Backup.json`); }
-        async function exportAllData() { const all = { version: "20.1", date: new Date().toISOString(), type: "full_archive", projectList: projectList, projects: {}, settings: {} }; for (const proj of projectList) { const id = proj.id; const prefix = id === 'default' ? 'default_' : `${id}_`; const keys = ['setting', 'protagonist', 'goal', 'obstacle', 'characters', 'outline', 'draft_html', 'chat_history']; const projData = {}; for (const k of keys) { const val = await localforage.getItem(`${prefix}${k}`); if (val) projData[k] = val; if (id === 'default' && !val) { const l = await localforage.getItem(k); if (l) projData[k] = l; } } all.projects[id] = projData; } const g = ['ai_active_provider', 'ai_config_deepseek', 'ai_config_gemini', 'ai_config_openai', 'ai_config_custom']; for(const k of g) all.settings[k] = await localforage.getItem(k); downloadJSON(all, `HeadFeedr_Full_Archive_${new Date().toISOString().slice(0,10)}.json`); }
-        
+        async function exportCurrentProject() { const d = { version: "20.2", date: new Date(), project: projectList.find(p=>p.id===currentProjectId).name, setting: val('setting'), protagonist: val('protagonist'), goal: val('goal'), obstacle: val('obstacle'), chars: await loadData('characters'), pl: await loadData('outline'), txt: quill.root.innerHTML, ch: await loadData('chat_history') }; downloadJSON(d, `${d.project}_Backup.json`); }
+        async function exportAllData() { const all = { version: "20.2", date: new Date().toISOString(), type: "full_archive", projectList: projectList, projects: {}, settings: {} }; for (const proj of projectList) { const id = proj.id; const prefix = id === 'default' ? 'default_' : `${id}_`; const keys = ['setting', 'protagonist', 'goal', 'obstacle', 'characters', 'outline', 'draft_html', 'chat_history']; const projData = {}; for (const k of keys) { const val = await localforage.getItem(`${prefix}${k}`); if (val) projData[k] = val; if (id === 'default' && !val) { const l = await localforage.getItem(k); if (l) projData[k] = l; } } all.projects[id] = projData; } const g = ['ai_active_provider', 'ai_config_deepseek', 'ai_config_gemini', 'ai_config_openai', 'ai_config_custom']; for(const k of g) all.settings[k] = await localforage.getItem(k); downloadJSON(all, `HeadFeedr_Full_Archive_${new Date().toISOString().slice(0,10)}.json`); }
         function val(id) { return document.getElementById(id).value; }
         function switchTab(tid, btn) { document.querySelectorAll('.module-section').forEach(e => e.classList.add('hidden')); document.getElementById(tid).classList.remove('hidden'); document.querySelectorAll('.pc-nav-btn, .mobile-nav-btn').forEach(b => { b.classList.remove('active'); b.classList.add('inactive'); }); if(btn) { btn.classList.add('active'); btn.classList.remove('inactive'); } }
         function toggleExportMenu(e) { e.stopPropagation(); document.getElementById('export-menu').classList.toggle('scale-0'); }
